@@ -78,6 +78,15 @@ table.views-view-table td a:visited,
   color: var(--siempre-accent-darker, #001a50);
 }
 
+/* Ensure report type column headers stay unstyled */
+th.views-field-field-submission-report-type {
+  background-color: transparent !important;
+}
+th.views-field-field-submission-report-type a {
+  color: var(--siempre-accent-dark, inherit) !important;
+  background-color: transparent !important;
+}
+
 /* Views field specific styling - Report type badges (td only, not th headers) */
 td.views-field-field-submission-report-type.final-thesis a {
   background-color: var(--siempre-accent, rgb(0, 54, 177)) !important;
