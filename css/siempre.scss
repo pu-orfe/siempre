@@ -83,16 +83,6 @@ table.views-view-table td a,
 	}
 }
 
-/* Ensure report type column headers stay unstyled */
-th.views-field-field-submission-report-type {
-	background-color: transparent !important;
-
-	a {
-		color: var(--siempre-accent-dark, inherit) !important;
-		background-color: transparent !important;
-	}
-}
-
 /* Views field specific styling - Report type badges (td only, not th headers) */
 td.views-field-field-submission-report-type {
 	&.final-thesis a {
