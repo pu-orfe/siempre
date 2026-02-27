@@ -61,6 +61,23 @@ a:visited {
   background-color: var(--siempre-accent, #0036b1);
 }
 
+/* Normalize links in table bodies to accent blue on white backgrounds */
+.views-table td a,
+table.views-view-table td a,
+.view-content table td a {
+  color: var(--siempre-accent, #0036b1);
+}
+.views-table td a:hover, .views-table td a:focus,
+table.views-view-table td a:hover, table.views-view-table td a:focus,
+.view-content table td a:hover, .view-content table td a:focus {
+  color: var(--siempre-accent-dark, #002780);
+}
+.views-table td a:visited,
+table.views-view-table td a:visited,
+.view-content table td a:visited {
+  color: var(--siempre-accent-darker, #001a50);
+}
+
 /* Views field specific styling - Report type badges */
 td.views-field-field-submission-report-type a {
   color: #fff !important;
