@@ -83,8 +83,8 @@ table.views-view-table td a,
 	}
 }
 
-/* Views field specific styling - Report type badges */
-.views-field-field-submission-report-type {
+/* Views field specific styling - Report type badges (td only, not th headers) */
+td.views-field-field-submission-report-type {
 	&.final-thesis a {
 		background-color: var(--siempre-accent, rgb(0,54,177)) !important;
 		color: #fff !important;
