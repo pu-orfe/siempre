@@ -1,0 +1,28 @@
+# IDE and editor files
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Claude Code
+.claude/
+
+# Sass
+.sass-cache/
+*.css.map
+
+# Node (if using build tools)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Environment
+.env
+.env.*
