@@ -5,6 +5,7 @@
  * Theme settings form for the Siempre theme.
  */
 
+use Drupal\Core\Extension\ThemeSettingsProvider;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -20,7 +21,7 @@ function siempre_form_system_theme_settings_alter(&$form, FormStateInterface $fo
   $form['siempre_settings']['accent_color'] = [
     '#type' => 'color',
     '#title' => t('Accent Color'),
-    '#default_value' => theme_get_setting('accent_color') ?? '#e77500',
+    '#default_value' => \Drupal::service(ThemeSettingsProvider::class)->getSetting('accent_color') ?? '#e77500',
     '#description' => t('Select the primary accent color for the theme. This color will be used for links, menu backgrounds, and other accent elements. Complementary colors will be automatically derived.'),
   ];
 
@@ -36,13 +37,13 @@ function siempre_form_system_theme_settings_alter(&$form, FormStateInterface $fo
   $form['theme_settings']['toggle_name'] = [
     '#type' => 'checkbox',
     '#title' => t('Site name'),
-    '#default_value' => theme_get_setting('features.name'),
+    '#default_value' => \Drupal::service(ThemeSettingsProvider::class)->getSetting('features.name'),
   ];
 
   $form['theme_settings']['toggle_slogan'] = [
     '#type' => 'checkbox',
     '#title' => t('Site slogan'),
-    '#default_value' => theme_get_setting('features.slogan'),
+    '#default_value' => \Drupal::service(ThemeSettingsProvider::class)->getSetting('features.slogan'),
   ];
 }
 
