@@ -368,6 +368,10 @@ function siempre_theme_suggestions_block_alter(array &$suggestions, array $varia
  * allowed_values, so this works regardless of Manage Display configuration.
  */
 function siempre_preprocess_page_title(&$variables) {
+  if (siempre_is_login_prompt()) {
+    $variables['title'] = siempre_login_prompt_title();
+    return;
+  }
   $route_match = \Drupal::routeMatch();
 
   // User edit-form routes: replace the username H1 with the user's
@@ -432,6 +436,10 @@ function siempre_preprocess_page_title(&$variables) {
  * Implements hook_preprocess_html().
  */
 function siempre_preprocess_html(&$variables) {
+  // The browser tab says what the page heading does (siempre_login_prompt()).
+  if (siempre_is_login_prompt() && isset($variables['head_title']['title'])) {
+    $variables['head_title']['title'] = siempre_login_prompt_title();
+  }
   // Get the accent color from theme settings. _siempre_theme_setting() reads ONLY
   // the active theme's settings store — it does not walk the base-theme chain.
   // When a sub-theme of siempre is the active theme and hasn't explicitly set
@@ -702,20 +710,57 @@ function siempre_preprocess_page(&$variables) {
 }
 
 /**
+ * Whether this page is a 403 for someone not logged in to Drupal.
+ *
+ * Such a 403 is really "log in to continue": past a sign-in gate everyone has
+ * already signed in to Microsoft, but a Drupal page still needs its own
+ * log-in. A logged-in user denied a page keeps "Access denied", which is
+ * true for them.
+ */
+function siempre_is_login_prompt(): bool {
+  $exception = \Drupal::requestStack()->getCurrentRequest()?->attributes->get('exception');
+  return $exception instanceof \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface
+    && $exception->getStatusCode() === 403
+    && \Drupal::currentUser()->isAnonymous();
+}
+
+/**
+ * The log-in prompt's title, in place of "Access denied".
+ */
+function siempre_login_prompt_title(): \Drupal\Core\StringTranslation\TranslatableMarkup {
+  return t('Log in to continue');
+}
+
+/**
+ * The log-in prompt: a sentence and a Log In button.
+ *
+ * It replaced "You are not authorized to access this page. You may need to
+ * Log In.", whose link people missed. Log In goes to /user/login. After
+ * logging in, the site may open its home page rather than the page asked
+ * for, so the text promises nothing about returning there.
+ */
+function siempre_login_prompt(): array {
+  return [
+    '#type' => 'container',
+    '#attributes' => ['class' => ['login-prompt']],
+    'text' => [
+      '#markup' => '<p>' . t('Log in with your Princeton account to continue.') . '</p>',
+    ],
+    'button' => [
+      '#type' => 'link',
+      '#title' => t('Log In'),
+      '#url' => \Drupal\Core\Url::fromRoute('user.login'),
+      '#attributes' => ['class' => ['button', 'button--primary', 'login-prompt__button']],
+    ],
+  ];
+}
+
+/**
  * Implements hook_preprocess_block().
  */
 function siempre_preprocess_block(&$variables) {
-  if (isset($variables['plugin_id']) && $variables['plugin_id'] === 'system_main_block') {
-    $request = \Drupal::request();
-    if ($exception = $request->attributes->get('exception')) {
-      if ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface && $exception->getStatusCode() === 403) {
-        if (\Drupal::currentUser()->isAnonymous()) {
-          $variables['content']['#markup'] = \Drupal\Core\Render\Markup::create(t('You are not authorized to access this page. You may need to <a href=":login">Log In</a>.', [
-            ':login' => \Drupal\Core\Url::fromRoute('user.login')->toString(),
-          ]));
-        }
-      }
-    }
+  if (($variables['plugin_id'] ?? '') === 'system_main_block' && siempre_is_login_prompt()) {
+    $variables['content'] = siempre_login_prompt();
   }
 }
 
