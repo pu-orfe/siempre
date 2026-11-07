@@ -1707,3 +1707,19 @@ caption, .caption {
 }
 
 /*# sourceMappingURL=siempre.css.map */
+
+/* The log-in prompt: a 403 for someone not logged in yet
+   (siempre_login_prompt()). */
+.login-prompt {
+  max-width: 36rem;
+  margin: 0.5rem 0 2rem;
+}
+.login-prompt p {
+  margin: 0 0 1.25rem;
+  font-size: 1.1rem;
+}
+.login-prompt a.button.login-prompt__button {
+  padding: 0.9rem 2.25rem !important;
+  font-size: 1.15rem !important;
+  border-radius: 6px !important;
+}
